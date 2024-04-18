@@ -22,3 +22,12 @@ go mod tidy
 go run github.com/99designs/gqlgen@v0.17.45 generate
 ```
 
+## Command shell Docker|Podman
+
+### Build and start up
+
+```shell
+docker|podman compose up --build
+```
+
+
