@@ -35,7 +35,7 @@ func main() {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
-	db := database.Connect(ctx)
+	db := database.ConnectPg(ctx)
 	defer database.Close()
 
 	userRepo := repository.NewSQLUserRepository(db)

@@ -5,13 +5,14 @@ import (
 	"database/sql"
 	"log"
 	"os"
+	"time"
 
 	_ "github.com/lib/pq"
 )
 
 var DB *sql.DB
 
-func Connect(ctx context.Context) *sql.DB {
+func ConnectPg(ctx context.Context) *sql.DB {
 
 	dataSource := os.Getenv("POSTGRES_URL")
 	if dataSource == "" {
@@ -19,9 +20,15 @@ func Connect(ctx context.Context) *sql.DB {
 	}
 
 	db, err := sql.Open("postgres", dataSource)
-
 	if err != nil {
 		log.Fatal("Error connecting to the database: ", err)
+	}
+
+	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
+	defer cancel()
+
+	if err := db.PingContext(ctx); err != nil {
+		log.Fatal("Error pinging database: ", err)
 	}
 
 	return db
